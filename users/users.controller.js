@@ -9,13 +9,13 @@ router.get('/', getAll);
 module.exports = router;
 
 function authenticate(req, res, next) {
-    userService.authenticate(req.body)
+    userService.authenticate(req, req.body)
         .then(user => res.json(user))
         .catch(next);
 }
 
 function getAll(req, res, next) {
-    userService.getAll()
+    userService.getAll(req)
         .then(users => res.json(users))
         .catch(next);
 }

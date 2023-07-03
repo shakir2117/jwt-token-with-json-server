@@ -7,7 +7,7 @@ module.exports = {
     getAll
 };
 
-async function authenticate({ username, password }) {
+async function authenticate(req, { username, password }) {
   const response = await axios.get('http://localhost:3000/users');
   const users = response.data;
   const user = users.find(u => u.username === username && u.password === password);
@@ -15,7 +15,7 @@ async function authenticate({ username, password }) {
   if (!user) throw 'Username or password is incorrect';
 
   // create a jwt token that is valid for 7 days
-  const token = jwt.sign({ sub: user.id }, config.secret, { expiresIn: '7d' });
+  const token = jwt.sign({ sub: user.id }, config.secret, { expiresIn: '5000ms' });
 
   return {
     ...omitPassword(user),
@@ -24,8 +24,8 @@ async function authenticate({ username, password }) {
 }
 
 
-async function getAll() {
-  const response = await axios.get('http://localhost:3000/users');
+async function getAll(req) {
+    const response = await axios.get('http://localhost:3000/users');
   const users = response.data;
   return users.map(u => omitPassword(u));
 }
